@@ -10,11 +10,9 @@ use pocketmine\block\Block;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\event\player\PlayerToggleSneakEvent;
 
 class Main extends PluginBase implements Listener{
 	private $tap = [];
-	private $sneak;
 	
 	public function onEnable(){
 		@mkdir($this->getDataFolder());
@@ -28,13 +26,6 @@ class Main extends PluginBase implements Listener{
 		return $this->economy;
 	}
 	
-	public function onSneak(PlayerToggleSneakEvent $ev){
-		if($ev->isSneaking()){
-			$this->sneak = true;
-		}else{
-			$this->sneak = false;
-		}
-	}
 	public function onTap(PlayerInteractEvent $ev){
 		$player = $ev->getPlayer();
 		$block = $ev->getBlock();
@@ -42,7 +33,6 @@ class Main extends PluginBase implements Listener{
 			case Block::ANVIL:
 			 $time = time();
 			 $user = strtolower($player->getName());
-			 if($this->sneak != false){
 			 	if(isset($this->tap[$user]) and $time - $this->tap[$user] < 1){
 			 		$this->repairItem($player);
 			 		unset($this->tap[$user]);
